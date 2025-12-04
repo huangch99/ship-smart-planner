@@ -12,6 +12,7 @@ import {
 } from './types';
 import { calculateLineMetrics, convertLength, convertWeight, convertBoxConfig } from './utils/calculations';
 import ProductCatalog from './components/ProductCatalog';
+import { DEFAULT_PRODUCTS, CATALOG_VERSION } from './data/defaultProducts';
 
 // --- Constants & Defaults ---
 
@@ -26,32 +27,6 @@ const INITIAL_ITEM: ItemInput = {
   name: '',
   quantity: 100,
 };
-
-// Seed Data stored in METRIC (mm/g)
-const SAMPLE_PRODUCTS: Product[] = [
-  {
-    id: 'p1',
-    name: 'Standard Widget',
-    box: {
-      itemsPerBox: 12,
-      // 24x18x12 in => 610x457x305 mm
-      dimensions: { length: 610, width: 457, height: 305 },
-      // 15.2 lb => 6895 g
-      grossWeight: 6895
-    }
-  },
-  {
-    id: 'p2',
-    name: 'Compact Gadget',
-    box: {
-      itemsPerBox: 50,
-      // 20x20x10 in => 508x508x254 mm
-      dimensions: { length: 508, width: 508, height: 254 },
-      // 25.5 lb => 11567 g
-      grossWeight: 11567
-    }
-  }
-];
 
 type ViewMode = 'manifest' | 'catalog';
 
@@ -106,21 +81,30 @@ function App() {
     localStorage.setItem('shipSmart_lines', JSON.stringify(lines));
   }, [lines]);
   
-  // Initialize products from LocalStorage if available, otherwise use seed data
+  // Initialize products with Version Checking
   // Products are ALWAYS stored in METRIC (mm/g)
   const [products, setProducts] = useState<Product[]>(() => {
     try {
-      const saved = localStorage.getItem('shipSmart_products');
-      return saved ? JSON.parse(saved) : SAMPLE_PRODUCTS;
+      const savedProducts = localStorage.getItem('shipSmart_products');
+      const savedVersion = localStorage.getItem('shipSmart_catalogVersion');
+      
+      // If version mismatch or no data, use DEFAULT_PRODUCTS and update version
+      if (!savedProducts || !savedVersion || parseInt(savedVersion) < CATALOG_VERSION) {
+        // Automatically migrate/reset to new defaults
+        return DEFAULT_PRODUCTS;
+      }
+      
+      return JSON.parse(savedProducts);
     } catch (e) {
       console.error("Error loading products from local storage:", e);
-      return SAMPLE_PRODUCTS;
+      return DEFAULT_PRODUCTS;
     }
   });
 
-  // Save products to LocalStorage whenever they change
+  // Save products and version to LocalStorage whenever they change
   useEffect(() => {
     localStorage.setItem('shipSmart_products', JSON.stringify(products));
+    localStorage.setItem('shipSmart_catalogVersion', CATALOG_VERSION.toString());
   }, [products]);
   
   // Form State
