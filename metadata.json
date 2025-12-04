@@ -1,5 +1,5 @@
 {
-  "name": "Pallet Estimator",
+  "name": "ShipSmart Logistics Planner",
   "description": "Calculate shipment volumes, box counts, and pallet requirements.",
   "requestFramePermissions": []
 }
