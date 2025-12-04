@@ -1,0 +1,5 @@
+{
+  "name": "Pallet Estimator",
+  "description": "Calculate shipment volumes, box counts, and pallet requirements.",
+  "requestFramePermissions": []
+}
