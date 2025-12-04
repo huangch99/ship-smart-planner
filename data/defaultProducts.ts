@@ -27,11 +27,6 @@ export const DEFAULT_PRODUCTS: Product[] = [
     box: { itemsPerBox: 1600, dimensions: { length: 340, width: 230, height: 290 }, grossWeight: 13200 }
   },
   {
-    id: 'LLL147A-ROW',
-    name: 'LLL147A-ROW',
-    box: { itemsPerBox: 1600, dimensions: { length: 340, width: 230, height: 290 }, grossWeight: 13850 }
-  },
-  {
     id: 'LLL162A',
     name: 'LLL162A',
     box: { itemsPerBox: 1600, dimensions: { length: 340, width: 230, height: 290 }, grossWeight: 13200 }
